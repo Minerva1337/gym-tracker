@@ -1,6 +1,4 @@
-// Datei: logic_layer/logic-fetch.ts
-
-import { exec } from 'child_process';
+import { spawn } from 'child_process';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
@@ -9,14 +7,17 @@ const OUTPUT_DIR = path.resolve(__dirname, '../data_layer/tmp_json');
 
 export async function fetchFromDB(sqlQuery: string): Promise<any[]> {
   return new Promise((resolve, reject) => {
-    // Escape doppelte Anführungszeichen im SQL
-    const escapedQuery = sqlQuery.replace(/"/g, '\\"');
+    const args = [PYTHON_SCRIPT, sqlQuery, OUTPUT_DIR];
+    const process = spawn('python3.10', args);
 
-    // korrekt zusammengesetzter Shell-Befehl
-    const command = `python3.10 "${PYTHON_SCRIPT}" "${escapedQuery}" "${OUTPUT_DIR}"`;
+    let stdout = '';
+    let stderr = '';
 
-    exec(command, async (error, stdout, stderr) => {
-      if (error) {
+    process.stdout.on('data', data => { stdout += data.toString(); });
+    process.stderr.on('data', data => { stderr += data.toString(); });
+
+    process.on('close', async (code) => {
+      if (code !== 0) {
         return reject(`Python-Fehler:\n${stderr}`);
       }
 
@@ -25,7 +26,7 @@ export async function fetchFromDB(sqlQuery: string): Promise<any[]> {
       try {
         const content = await fs.readFile(jsonPath, 'utf-8');
         const data = JSON.parse(content);
-        await fs.unlink(jsonPath); // temporäre Datei löschen
+        await fs.unlink(jsonPath);
         resolve(data);
       } catch (e) {
         reject(`Fehler beim Lesen/Parsen:\n${e}`);
