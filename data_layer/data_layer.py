@@ -17,9 +17,9 @@ def main():
 
     # MariaDB Verbindung
     connection = mysql.connector.connect(
-        host="localhost",
-        user="root",                 # Passe an
-        password="dein_passwort",    # Passe an
+        host="localhost:3306",
+        user="lukas",                 
+        password="MtYKk$uVnXY9WGNHfryX",   
         database="gym"
     )
     cursor = connection.cursor(dictionary=True)
