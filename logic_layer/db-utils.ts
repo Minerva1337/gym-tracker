@@ -1,13 +1,8 @@
 import { fetchFromDB } from './logic-fetch';
 
-/**
- * Generische Einfügefunktion für beliebige Tabellen
- * @param table - Name der Zieltabelle, z. B. "exercises"
- * @param data - Objekt mit Spaltennamen und Werten
- * @returns Promise<boolean> (true bei Erfolg)
- */
 export async function createEntry(table: string, data: Record<string, any>): Promise<boolean> {
   if (!table || typeof data !== 'object' || Object.keys(data).length === 0) {
+    console.error("createEntry() → Leere oder ungültige Eingabedaten:", data);
     throw new Error("Ungültige Eingabe für createEntry()");
   }
 
@@ -17,6 +12,8 @@ export async function createEntry(table: string, data: Record<string, any>): Pro
     .join(', ');
 
   const sql = `INSERT INTO \`${table}\` (${columns}) VALUES (${values});`;
+
+  console.log("DEBUG - SQL:", sql);
 
   try {
     await fetchFromDB(sql);
