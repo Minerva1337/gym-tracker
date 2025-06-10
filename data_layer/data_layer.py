@@ -37,7 +37,8 @@ def main():
 
     # JSON-Datei schreiben
     with open(filepath, "w", encoding="utf-8") as json_file:
-        json.dump(results, json_file, ensure_ascii=False, indent=2)
+        json.dump(results, json_file, ensure_ascii=False, indent=2, default=str)
+
 
     # Pfad zur JSON-Datei ausgeben
     print(filepath)
