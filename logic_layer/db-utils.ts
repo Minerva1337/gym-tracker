@@ -25,8 +25,6 @@ export async function createEntry(table: string, data: Record<string, any>): Pro
 }
 
 
-import { fetchFromDB } from './logic-fetch';
-
 /**
  * Generische Funktion zum Aktualisieren eines Eintrags in einer Tabelle
  * @param table - Tabellenname (z. B. "exercises")
