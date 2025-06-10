@@ -60,3 +60,22 @@ export async function updateEntry(
     return false;
   }
 }
+
+export async function deleteEntry(table: string, condition: string): Promise<boolean> {
+  if (!table || !condition) {
+    console.error("deleteEntry() → Ungültige Eingabe:", { table, condition });
+    throw new Error("Ungültige Eingabe für deleteEntry()");
+  }
+
+  const sql = `DELETE FROM \`${table}\` WHERE ${condition};`;
+
+  console.log("DEBUG - SQL (delete):", sql);
+
+  try {
+    await fetchFromDB(sql);
+    return true;
+  } catch (error) {
+    console.error("Fehler bei deleteEntry:", error);
+    return false;
+  }
+}
