@@ -2,7 +2,7 @@
 import { Controller, Post, Body, UseGuards } from '@nestjs/common';
 import { createEntry } from '../logic_layer/db-utils';
 import { JwtAuthGuard } from '../auth/jwt.guard';
-import { User } from '../common/user.decorator';
+import { User } from '../common/decorators/user.decorator';
 
 @Controller('exercises')
 export class ExercisesController {
