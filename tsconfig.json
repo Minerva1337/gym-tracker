@@ -11,6 +11,6 @@
     "types": ["node"],               // Setzt Typen von node
     "strict": true                   // Strikte Typprüfung aktivieren
   },
-  "include": ["*.ts"],                // Alle .ts-Dateien im Hauptverzeichnis
-  "exclude": ["node_modules"]         // Den node_modules-Ordner ausschließen
+  "include": ["backend/**/*.ts"],    // Alle .ts-Dateien im 'backend'-Ordner
+  "exclude": ["node_modules"]        // Den node_modules-Ordner ausschließen
 }
