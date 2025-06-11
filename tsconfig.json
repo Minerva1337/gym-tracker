@@ -4,15 +4,15 @@
     "module": "commonjs",
     "declaration": true,
     "sourceMap": true,
-    "outDir": "./dist",
+    "outDir": "./dist",  // <-- Sicherstellen, dass die kompilierte JS-Datei in 'dist' landet
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "types": ["node"],
     "strict": true,
-    "experimentalDecorators": true,  // <- Füge das hier hinzu
-    "emitDecoratorMetadata": true     // <- Und das hier
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
-  "include": ["backend/**/*.ts"],  // Oder was immer du hier verwendest
+  "include": ["backend/**/*.ts"],  // Alle .ts-Dateien im 'backend'-Ordner
   "exclude": ["node_modules"]
 }
