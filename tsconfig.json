@@ -2,15 +2,17 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "commonjs",
-    "declaration": true,             // Erzeugt .d.ts-Dateien
-    "sourceMap": true,               // Erzeugt source maps für Debugging
-    "outDir": "./dist",              // Alle Dateien werden im dist-Ordner erzeugt
-    "esModuleInterop": true,         // Ermöglicht es, mit ES- und CommonJS-Modulen zu arbeiten
-    "skipLibCheck": true,            // Bibliothekstypen nicht prüfen (für Performance)
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["node"],               // Setzt Typen von node
-    "strict": true                   // Strikte Typprüfung aktivieren
+    "types": ["node"],
+    "strict": true,
+    "experimentalDecorators": true,  // <- Füge das hier hinzu
+    "emitDecoratorMetadata": true     // <- Und das hier
   },
-  "include": ["backend/**/*.ts"],    // Alle .ts-Dateien im 'backend'-Ordner
-  "exclude": ["node_modules"]        // Den node_modules-Ordner ausschließen
+  "include": ["backend/**/*.ts"],  // Oder was immer du hier verwendest
+  "exclude": ["node_modules"]
 }
