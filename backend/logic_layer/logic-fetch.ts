@@ -8,7 +8,7 @@ const OUTPUT_DIR = path.resolve(__dirname, '../data_layer/tmp_json');
 export async function fetchFromDB(sqlQuery: string): Promise<any[]> {
   return new Promise((resolve, reject) => {
     const args = [PYTHON_SCRIPT, sqlQuery, OUTPUT_DIR];
-    const process = spawn('python3.10', args);
+    const process = spawn(`${process.env.HOME}/python3.10/bin/python3.10`, args);
 
     let stdout = '';
     let stderr = '';
