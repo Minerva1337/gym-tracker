@@ -8,15 +8,22 @@ const OUTPUT_DIR = path.resolve(__dirname, '../data_layer/tmp_json');
 export async function fetchFromDB(sqlQuery: string): Promise<any[]> {
   return new Promise((resolve, reject) => {
     const args = [PYTHON_SCRIPT, sqlQuery, OUTPUT_DIR];
-    const process = spawn(`${process.env.HOME}/python3.10/bin/python3.10`, args);
+    const pythonPath = `${process.env.HOME}/python3.10/bin/python3.10`;
+
+    const pythonProcess = spawn(pythonPath, args);
 
     let stdout = '';
     let stderr = '';
 
-    process.stdout.on('data', data => { stdout += data.toString(); });
-    process.stderr.on('data', data => { stderr += data.toString(); });
+    pythonProcess.stdout.on('data', (data: Buffer) => { 
+      stdout += data.toString(); 
+    });
 
-    process.on('close', async (code) => {
+    pythonProcess.stderr.on('data', (data: Buffer) => { 
+      stderr += data.toString(); 
+    });
+
+    pythonProcess.on('close', async (code: number) => {
       if (code !== 0) {
         return reject(`Python-Fehler:\n${stderr}`);
       }
