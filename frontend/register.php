@@ -2,12 +2,13 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// 1. Eingabe holen
+// 1. Eingaben holen
+$username = $_POST['username'] ?? '';
 $email = $_POST['email'] ?? '';
 $pass = $_POST['password'] ?? '';
 
-if (!$email || !$pass) {
-  exit('❌ E-Mail und Passwort erforderlich.');
+if (!$username || !$email || !$pass) {
+  exit('❌ Benutzername, E-Mail und Passwort erforderlich.');
 }
 
 // 2. TypeScript-Skriptpfad holen
@@ -16,17 +17,15 @@ if (!$scriptPath) {
   exit("❌ TypeScript-Datei nicht gefunden.");
 }
 
-// 3. Shell-Kommando vorbereiten
+// 3. Shell-Befehl vorbereiten
+$escapedUsername = escapeshellarg($username);
 $escapedEmail = escapeshellarg($email);
 $escapedPass = escapeshellarg($pass);
 
-// Absoluter Pfad zu npx + ts-node
 $npxPath = '/var/www/vhosts/lukas-holzmann.de/.nodenv/shims/npx';
-
-// Optional: Umgebungsvariable PATH setzen
 putenv("PATH=" . getenv("PATH") . ":/var/www/vhosts/lukas-holzmann.de/.nodenv/shims");
 
-$cmd = "$npxPath ts-node $scriptPath $escapedEmail $escapedPass";
+$cmd = "$npxPath ts-node $scriptPath $escapedUsername $escapedEmail $escapedPass";
 
 // 4. Ausführen
 $output = shell_exec($cmd);
@@ -47,13 +46,7 @@ if (!is_array($data)) {
   exit;
 }
 
-// 7. Erfolg prüfen
-if ($data['success'] === true) {
-  echo "✅ Registrierung erfolgreich!";
-} else {
-  echo "❌ Fehler beim Registrieren.";
-}
-
+// 7. Erfolg oder Fehlermeldung anzeigen
 if ($data['success'] === true) {
   echo "✅ Registrierung erfolgreich!";
 } else {
@@ -61,8 +54,9 @@ if ($data['success'] === true) {
   if ($reason === 'duplicate_email') {
     echo "❌ Diese E-Mail ist bereits registriert.";
   } elseif ($reason === 'insert_failed') {
-    echo "❌ Datenbankfehler beim Einfügen.";
+    $msg = $data['message'] ?? '';
+    echo "❌ Fehler beim Speichern.<br><pre>$msg</pre>";
   } else {
-    echo "❌ Fehler beim Registrieren.";
+    echo "❌ Registrierung fehlgeschlagen.";
   }
 }
