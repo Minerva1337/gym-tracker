@@ -13,7 +13,7 @@ export async function createEntry(table: string, data: Record<string, any>): Pro
 
   const sql = `INSERT INTO \`${table}\` (${columns}) VALUES (${values});`;
 
-  console.log("DEBUG - SQL:", sql);
+  //console.log("DEBUG - SQL:", sql);
 
   try {
     await fetchFromDB(sql);
