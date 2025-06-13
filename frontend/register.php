@@ -11,7 +11,7 @@ if (!$email || !$pass) {
 }
 
 // 2. TypeScript-Skriptpfad holen
-$scriptPath = realpath(__DIR__ . '/../backend/logic_layer/users/createUser.ts');
+$scriptPath = realpath(__DIR__ . '/../backend/logic_layer/users/registerUser.ts');
 if (!$scriptPath) {
   exit("❌ TypeScript-Datei nicht gefunden.");
 }
@@ -52,4 +52,17 @@ if ($data['success'] === true) {
   echo "✅ Registrierung erfolgreich!";
 } else {
   echo "❌ Fehler beim Registrieren.";
+}
+
+if ($data['success'] === true) {
+  echo "✅ Registrierung erfolgreich!";
+} else {
+  $reason = $data['reason'] ?? 'unbekannt';
+  if ($reason === 'duplicate_email') {
+    echo "❌ Diese E-Mail ist bereits registriert.";
+  } elseif ($reason === 'insert_failed') {
+    echo "❌ Datenbankfehler beim Einfügen.";
+  } else {
+    echo "❌ Fehler beim Registrieren.";
+  }
 }
