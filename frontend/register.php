@@ -10,30 +10,35 @@ if (!$email || !$pass) {
   exit('❌ E-Mail und Passwort erforderlich.');
 }
 
-// 2. TS-Skript vorbereiten
+// 2. TypeScript-Skriptpfad holen
 $scriptPath = realpath(__DIR__ . '/../backend/logic_layer/users/createUser.ts');
 if (!$scriptPath) {
   exit("❌ TypeScript-Datei nicht gefunden.");
 }
 
+// 3. Shell-Kommando vorbereiten
 $escapedEmail = escapeshellarg($email);
 $escapedPass = escapeshellarg($pass);
-$cmd = "npx ts-node $scriptPath $escapedEmail $escapedPass";
 
-// 3. Ausführen
+// Absoluter Pfad zu npx + ts-node
+$npxPath = '/var/www/vhosts/lukas-holzmann.de/.nodenv/shims/npx';
+
+// Optional: Umgebungsvariable PATH setzen
+putenv("PATH=" . getenv("PATH") . ":/var/www/vhosts/lukas-holzmann.de/.nodenv/shims");
+
+$cmd = "$npxPath ts-node $scriptPath $escapedEmail $escapedPass";
+
+// 4. Ausführen
 $output = shell_exec($cmd);
 
-// 4. Fehler prüfen
+// 5. Fehler prüfen
 if ($output === null) {
   echo "❌ Fehler: shell_exec() hat nichts zurückgegeben.<br>";
   echo "<pre>Befehl:\n$cmd</pre>";
   exit;
 }
 
-// 5. Debug-Ausgabe (nur zur Entwicklung)
-// echo "<pre>Antwort:\n$output</pre>";
-
-// 6. Sicheres JSON-Dekodieren
+// 6. JSON dekodieren
 $data = json_decode($output, true);
 
 if (!is_array($data)) {
