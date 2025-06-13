@@ -60,3 +60,7 @@ if ($data['success'] === true) {
     echo "❌ Registrierung fehlgeschlagen.";
   }
 }
+
+$lines = explode("\n", trim($output));
+$jsonLine = end($lines);
+$data = json_decode($jsonLine, true);

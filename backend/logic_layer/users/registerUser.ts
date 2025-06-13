@@ -9,7 +9,7 @@ async function run() {
     process.exit(1);
   }
 
-  // E-Mail prüfen
+  // E-Mail-Schutz (SQL-Injection vermeiden)
   const escapedEmail = email.replace(/'/g, "\\'");
   const existing = await fetchFromDB(`SELECT id FROM users WHERE email = '${escapedEmail}'`);
 
@@ -21,7 +21,7 @@ async function run() {
   // Passwort hashen
   const hash = await bcrypt.hash(password, 10);
 
-  // INSERT durchführen
+  // Insert versuchen
   try {
     const inserted = await createEntry('users', {
       username,
