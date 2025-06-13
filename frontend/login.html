@@ -1,13 +1,91 @@
-<form method="POST" action="../backend/users/login.php">
-    <label for="username">Benutzername:</label>
-    <input type="text" name="username" required>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login & Registrierung</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    h2 {
+      margin-top: 40px;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+    }
+    input {
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      padding: 10px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .response {
+      margin-top: 10px;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <h2>🔐 Registrierung</h2>
+  <form id="registerForm">
+    <input type="email" name="email" placeholder="E-Mail" required />
+    <input type="password" name="password" placeholder="Passwort" required />
+    <button type="submit">Registrieren</button>
+    <div class="response" id="registerResponse"></div>
+  </form>
 
-    <label for="password">Passwort:</label>
-    <input type="password" name="password" required>
+  <h2>✅ Login</h2>
+  <form id="loginForm">
+    <input type="email" name="email" placeholder="E-Mail" required />
+    <input type="password" name="password" placeholder="Passwort" required />
+    <button type="submit">Einloggen</button>
+    <div class="response" id="loginResponse"></div>
+  </form>
 
-    <label for="remember_me">
-        <input type="checkbox" name="remember_me" id="remember_me"> Angemeldet bleiben
-    </label>
+  <script>
+    const handleForm = (formId, endpoint, responseId) => {
+      const form = document.getElementById(formId);
+      const responseBox = document.getElementById(responseId);
 
-    <button type="submit">Login</button>
-</form>
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const res = await fetch(endpoint, {
+          method: "POST",
+          body: formData
+        });
+        const text = await res.text();
+        responseBox.textContent = text;
+      });
+    };
+
+    handleForm("registerForm", "register.php", "registerResponse");
+    handleForm("loginForm", "login.php", "loginResponse");
+  </script>
+</body>
+</html>
